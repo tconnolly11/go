@@ -48,6 +48,14 @@ func mustInitHorizonDB(app *App) {
 		maxIdle,
 		maxOpen,
 	)}
+
+	if app.config.RoDatabaseURL != "" {
+		app.roHistoryQ = &history.Q{mustNewDBSession(
+			app.config.RoDatabaseURL,
+			maxIdle,
+			maxOpen,
+		)}
+	}
 }
 
 func initIngester(app *App) {

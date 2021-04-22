@@ -97,7 +97,7 @@ var (
 	StaleHistory = problem.P{
 		Type:   "stale_history",
 		Title:  "Historical DB Is Too Stale",
-		Status: http.StatusServiceUnavailable,
+		Status: http.StatusLoopDetected, // Temp change to find stale resps in metrics.
 		Detail: "This horizon instance is configured to reject client requests " +
 			"when it can determine that the history database is lagging too far " +
 			"behind the connected instance of stellar-core.  If you operate this " +

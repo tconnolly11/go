@@ -354,3 +354,37 @@ func (m *StateMiddleware) WrapFunc(h http.HandlerFunc) http.HandlerFunc {
 func (m *StateMiddleware) Wrap(h http.Handler) http.Handler {
 	return m.WrapFunc(h.ServeHTTP)
 }
+
+type ReplicaSyncMiddleware struct {
+	PrimaryHistoryQ *history.Q
+	ReplicaHistoryQ *history.Q
+}
+
+// WrapFunc executes the middleware on a given HTTP handler function
+func (m *ReplicaSyncMiddleware) WrapFunc(h http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		replicaIngestLedger, err := m.ReplicaHistoryQ.GetLastLedgerIngestNonBlocking()
+		if err != nil {
+			problem.Render(r.Context(), w, err)
+			return
+		}
+
+		primaryIngestLedger, err := m.PrimaryHistoryQ.GetLastLedgerIngestNonBlocking()
+		if err != nil {
+			problem.Render(r.Context(), w, err)
+			return
+		}
+
+		if primaryIngestLedger > replicaIngestLedger {
+			// If this is the final problem.P is TBD.
+			problem.Render(r.Context(), w, hProblem.StaleHistory)
+			return
+		}
+
+		h.ServeHTTP(w, r)
+	}
+}
+
+func (m *ReplicaSyncMiddleware) Wrap(h http.Handler) http.Handler {
+	return m.WrapFunc(h.ServeHTTP)
+}

@@ -16,6 +16,7 @@ import (
 	"github.com/stellar/throttled"
 
 	"github.com/stellar/go/services/horizon/internal/actions"
+	"github.com/stellar/go/services/horizon/internal/db2/history"
 	"github.com/stellar/go/services/horizon/internal/ledger"
 	"github.com/stellar/go/services/horizon/internal/paths"
 	"github.com/stellar/go/services/horizon/internal/render/sse"
@@ -29,6 +30,7 @@ const maxAssetsForPathFinding = 15
 
 type RouterConfig struct {
 	DBSession   *db.Session
+	RoDBSession *db.Session
 	TxSubmitter *txsub.System
 	RateQuota   *throttled.RateQuota
 
@@ -97,6 +99,14 @@ func (r *Router) addMiddleware(config *RouterConfig,
 
 	if rateLimitter != nil {
 		r.Use(rateLimitter.RateLimit)
+	}
+
+	if config.RoDBSession != nil {
+		replicaSyncMiddleware := ReplicaSyncMiddleware{
+			PrimaryHistoryQ: &history.Q{config.DBSession},
+			ReplicaHistoryQ: &history.Q{config.RoDBSession},
+		}
+		r.Use(replicaSyncMiddleware.Wrap)
 	}
 
 	// Internal middlewares
