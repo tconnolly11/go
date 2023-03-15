@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/stellar/xdrgen.git
-  revision: 9dacf24a73b3e73105e9272ccf333704dcc82333
+  revision: 6e42b01e1ceb25c251d4c4d45443d7e0f228822a
   branch: master
   specs:
-    xdrgen (0.1.0)
+    xdrgen (0.1.1)
       activesupport (~> 6)
       memoist (~> 0.11.0)
       slop (~> 3.4)
@@ -12,7 +12,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.1.3.1)
+    activesupport (6.1.7.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -21,17 +21,17 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     coderay (1.1.3)
-    concurrent-ruby (1.1.8)
+    concurrent-ruby (1.2.2)
     faraday (1.3.0)
       faraday-net_http (~> 1.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
     faraday-net_http (1.0.1)
-    i18n (1.8.9)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     memoist (0.11.0)
     method_source (1.0.0)
-    minitest (5.14.4)
+    minitest (5.18.0)
     multipart-post (2.1.1)
     netrc (0.11.0)
     octokit (4.20.0)
@@ -50,9 +50,9 @@ GEM
     slop (3.6.0)
     treetop (1.5.3)
       polyglot (~> 0.3)
-    tzinfo (2.0.4)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    zeitwerk (2.4.2)
+    zeitwerk (2.6.7)
 
 PLATFORMS
   ruby
@@ -65,4 +65,4 @@ DEPENDENCIES
   xdrgen!
 
 BUNDLED WITH
-   2.2.15
+   2.1.4
